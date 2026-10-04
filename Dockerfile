@@ -3,5 +3,4 @@ ENV PYTHONUNBUFFERED=1
 ENV API_SERVER_ENABLED=true
 ENV API_SERVER_HOST=0.0.0.0
 ENV HERMES_DASHBOARD=0
-ENV API_SERVER_PORT=8642
-CMD ["gateway","run"]
+CMD ["sh","-lc","export API_SERVER_PORT=\"${PORT:-8642}\"; exec /opt/hermes/.venv/bin/hermes gateway run"]
