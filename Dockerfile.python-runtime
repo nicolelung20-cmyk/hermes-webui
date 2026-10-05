@@ -1,15 +1,28 @@
-FROM python:3.12-slim
+FROM python:3.14-slim
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     HERMES_PAPER_ONLY=true \
-    HERMES_LIVE_TRADING=false
+    HERMES_LIVE_TRADING=false \
+    HERMES_WEBUI_AGENT_DIR=/opt/hermes-agent \
+    HERMES_WEBUI_AUTO_INSTALL=false
 
 WORKDIR /app
+
 COPY requirements.txt requirements-dev.txt pyproject.toml ./
 RUN python -m pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements-dev.txt
+
+# Wire the WebUI to the upstream Hermes Agent source tree. Pin the checkout
+# so a rebuild cannot silently change the agent runtime.
+ARG HERMES_AGENT_COMMIT=9b6fc23baf2628e3331b57210ee7e27edc98ae9e
+RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates && \
+    git clone --depth 1 https://github.com/NousResearch/hermes-agent.git /opt/hermes-agent && \
+    cd /opt/hermes-agent && git fetch --depth 1 origin ${HERMES_AGENT_COMMIT} && git checkout ${HERMES_AGENT_COMMIT} && \
+    python -m pip install --no-cache-dir -e ".[web,mcp,pty]" && \
+    python -c "import tools, run_agent, hermes_cli; print('Hermes Agent imports: OK')" && \
+    apt-get purge -y git && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
 COPY . .
 
