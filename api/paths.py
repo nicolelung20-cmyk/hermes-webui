@@ -48,6 +48,11 @@ _IN_PLACE_WRITE_LOCK = threading.RLock()
 
 def _fsync_directory(directory: Path) -> None:
     """Persist a completed rename on filesystems that support directory fsync."""
+    # Vercel Functions have an ephemeral writable /tmp filesystem, but no
+    # reliable persistent HOME suitable for Hermes state.
+    if os.getenv("VERCEL") == "1":
+        return Path("/tmp") / "hermes"
+
     if os.name == "nt":
         return
     flags = os.O_RDONLY | getattr(os, "O_DIRECTORY", 0)
@@ -289,6 +294,10 @@ def _hermes_home_has_webui_state(base: Path) -> bool:
 
 def _platform_default_hermes_home() -> Path:
     """Return the platform-aware default Hermes home when HERMES_HOME is unset.
+
+    Vercel/serverless runtimes do not provide a durable writable home directory.
+    Use the platform's ephemeral /tmp area by default there; callers that need
+    persistence must explicitly configure HERMES_HOME or an external store.
 
     Native Windows Hermes Agent installs default to %LOCALAPPDATA%\\hermes,
     while POSIX installs use ~/.hermes.
