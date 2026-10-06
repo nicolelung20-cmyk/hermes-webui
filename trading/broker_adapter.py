@@ -8,8 +8,7 @@ from __future__ import annotations
 
 import json
 from abc import ABC, abstractmethod
-from dataclasses import asdict
-from decimal import Decimal
+from datetime import datetime, timezone
 from typing import Any
 from urllib import request
 
@@ -87,8 +86,6 @@ class LiveBrokerExecutor:
         filled_quantity = str(response.get("filled_quantity", "0"))
         fill_price_value = response.get("fill_price")
         fill_price = None if fill_price_value is None else str(fill_price_value)
-
-        from datetime import datetime, timezone
 
         return ExecutionResult(
             order_id=order_id,
