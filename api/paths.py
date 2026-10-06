@@ -48,11 +48,6 @@ _IN_PLACE_WRITE_LOCK = threading.RLock()
 
 def _fsync_directory(directory: Path) -> None:
     """Persist a completed rename on filesystems that support directory fsync."""
-    # Vercel Functions have an ephemeral writable /tmp filesystem, but no
-    # reliable persistent HOME suitable for Hermes state.
-    if os.getenv("VERCEL") == "1":
-        return Path("/tmp") / "hermes"
-
     if os.name == "nt":
         return
     flags = os.O_RDONLY | getattr(os, "O_DIRECTORY", 0)
@@ -314,6 +309,12 @@ def _platform_default_hermes_home() -> Path:
     legacy path is never preferred.  Explicit HERMES_HOME / HERMES_WEBUI_STATE_DIR
     overrides take precedence upstream and are unaffected.
     """
+    # Vercel Functions have an ephemeral writable /tmp filesystem, but no
+    # reliable persistent HOME suitable for Hermes state. Keep this check here,
+    # before the normal POSIX fallback, so the serverless runtime is activated.
+    if os.getenv("VERCEL") == "1":
+        return Path("/tmp") / "hermes"
+
     if os.name == "nt":
         local_app_data = os.getenv("LOCALAPPDATA", "").strip()
         if local_app_data:
