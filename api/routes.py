@@ -15499,6 +15499,9 @@ def handle_get(handler, parsed) -> bool:
         )
 
     # ── Gateway Status (GET) ──
+    if parsed.path == "/api/paper/health":
+        return j(handler, {"ok": True, "paper": True, "broker_connected": False})
+
     if parsed.path == "/api/gateway/status":
         return j(handler, _gateway_status_payload())
 
@@ -15903,6 +15906,17 @@ def handle_post(handler, parsed) -> bool:
         if diag:
             diag.finish()
         return proxy_result
+
+    if parsed.path == "/api/paper/order":
+        from trading.paper_executor import OrderRequest, PaperExecutor
+        from decimal import Decimal
+        try:
+            order = OrderRequest(symbol=str(body.get("symbol","")), side=str(body.get("side","")), quantity=Decimal(str(body.get("quantity",""))), limit_price=(Decimal(str(body["limit_price"])) if body.get("limit_price") is not None else None), reason=str(body.get("reason","")))
+            result = PaperExecutor().submit(order)
+            from dataclasses import asdict
+            return j(handler, asdict(result), status=200)
+        except Exception as exc:
+            return bad(handler, str(exc), status=400)
 
     if parsed.path == "/api/shutdown":
         return _handle_shutdown(handler)
