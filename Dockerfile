@@ -106,6 +106,11 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /apptoo
 
+# Ship the Hermes Agent with the WebUI so the container is fully functional
+# without relying on a host-mounted agent checkout.
+RUN git clone --depth 1 https://github.com/NousResearch/hermes-agent.git /opt/hermes
+ENV HERMES_WEBUI_AGENT_DIR=/opt/hermes
+
 # Create the unprivileged runtime user. The entrypoint starts as root only for
 # UID/GID alignment and filesystem preparation, then execs the server as this user.
 RUN groupadd -g 1024 hermeswebui \
