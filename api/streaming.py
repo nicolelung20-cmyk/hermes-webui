@@ -28,6 +28,8 @@ from typing import Optional
 
 logger = logging.getLogger(__name__)
 
+from api.project_a import PROJECT_A_PROTOCOL
+
 from api.config import (
     get_config,
     STREAMS, STREAMS_LOCK, CANCEL_FLAGS, AGENT_INSTANCES, STREAM_PARTIAL_TEXT,
@@ -1351,6 +1353,7 @@ def _webui_ephemeral_system_prompt(
     surface_prompt = _webui_surface_context_prompt(surface_context)
     if surface_prompt:
         parts.append(surface_prompt)
+    parts.append(PROJECT_A_PROTOCOL)
     parts.append(_WEBUI_PROGRESS_PROMPT)
     delivery_prompt = _webui_delivery_context_prompt(config_data)
     if delivery_prompt:
