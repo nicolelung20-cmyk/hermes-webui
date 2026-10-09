@@ -367,12 +367,17 @@ rm -f $it || error_exit "Failed to delete test file in /app"
 
 echo ""; echo "== Checking required environment variables for hermes-webui"
 
-echo ""; echo "-- HERMES_WEBUI_STATE_DIR: Where to store sessions, workspaces, and other state (default: ~/.hermes/webui)"
-if [ -z "${HERMES_WEBUI_STATE_DIR+x}" ]; then error_exit "HERMES_WEBUI_STATE_DIR not set"; fi; 
+echo ""; echo "-- HERMES_WEBUI_STATE_DIR: Where to store sessions, passkeys, and other state"
+if [ -z "${HERMES_WEBUI_STATE_DIR+x}" ]; then error_exit "HERMES_WEBUI_STATE_DIR not set"; fi
 echo "-- HERMES_WEBUI_STATE_DIR: $HERMES_WEBUI_STATE_DIR"
-if [ ! -d "$HERMES_WEBUI_STATE_DIR" ]; then mkdir -p $HERMES_WEBUI_STATE_DIR || error_exit "Failed to create state directory at $HERMES_WEBUI_STATE_DIR"; fi
+if [ ! -d "$HERMES_WEBUI_STATE_DIR" ]; then mkdir -p "$HERMES_WEBUI_STATE_DIR" || error_exit "Failed to create state directory at $HERMES_WEBUI_STATE_DIR"; fi
 if [ ! -d "$HERMES_WEBUI_STATE_DIR" ]; then error_exit "HERMES_WEBUI_STATE_DIR directory does not exist at $HERMES_WEBUI_STATE_DIR"; fi
-it="$HERMES_WEBUI_STATE_DIR/.testfile"; touch $it || error_exit "Failed to verify state directory at $HERMES_WEBUI_STATE_DIR"
+# Railway volumes are mounted root-owned. Prepare the mounted state directory
+# while still in the root init phase, then verify it after dropping privileges.
+if [ "A${whoami}" == "Aroot" ]; then
+  chown -R "${WANTED_UID}:${WANTED_GID}" "$HERMES_WEBUI_STATE_DIR" || error_exit "Failed to grant runtime user access to state directory at $HERMES_WEBUI_STATE_DIR"
+fi
+it="$HERMES_WEBUI_STATE_DIR/.testfile"; touch "$it" || error_exit "Failed to verify state directory at $HERMES_WEBUI_STATE_DIR"
 rm -f $it || error_exit "Failed to delete test file in $HERMES_WEBUI_STATE_DIR"
 
 echo ""; echo "-- HERMES_WEBUI_DEFAULT_WORKSPACE: Default workspace directory shown on first launch"
