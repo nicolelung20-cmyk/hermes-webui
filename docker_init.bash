@@ -282,6 +282,9 @@ if [ "A${whoami}" == "Aroot" ]; then
   if [ -n "${HERMES_WEBUI_STATE_DIR:-}" ]; then
     mkdir -p "$HERMES_WEBUI_STATE_DIR" || error_exit "Failed to create state directory at $HERMES_WEBUI_STATE_DIR"
     chown -R "${WANTED_UID}:${WANTED_GID}" "$HERMES_WEBUI_STATE_DIR" || error_exit "Failed to set owner of state directory at $HERMES_WEBUI_STATE_DIR"
+    # Ensure the runtime owner can write session/passkey state even if the
+    # persistent volume's pre-existing directory mode was read-only.
+    chmod 700 "$HERMES_WEBUI_STATE_DIR" || error_exit "Failed to secure state directory at $HERMES_WEBUI_STATE_DIR"
   fi
 
   if [ -z "${HERMES_WEBUI_DEFAULT_WORKSPACE+x}" ]; then export HERMES_WEBUI_DEFAULT_WORKSPACE="/workspace"; fi
