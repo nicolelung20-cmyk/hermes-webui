@@ -578,13 +578,15 @@ def is_auth_enabled() -> bool:
 
 
 def verify_password(plain: str) -> bool:
-    """Verify a plaintext password against the stored hash.
+    """Verify a password unless passwordless-only mode has an enrolled passkey.
 
-    Supports transparent migration of password hashes that were computed
-    with the old `.signing_key` salt.  When the two keys differ and the
-    legacy-salted hash matches, the password is transparently re-hashed
-    with the current `.pbkdf2_key` and persisted to settings.json.
+    First-principles safety: passkey-only enforcement activates only after a
+    credential is durably registered. That preserves a bootstrap path before
+    enrollment and prevents accidental lockout if state storage is empty.
     """
+    if os.getenv("HERMES_WEBUI_PASSWORDLESS_ONLY", "").strip().lower() in {"1", "true", "yes", "on"}:
+        if are_passkeys_enabled():
+            return False
     expected = get_password_hash()
     if not expected:
         return False
