@@ -277,6 +277,13 @@ if [ "A${whoami}" == "Aroot" ]; then
   chown hermeswebui:hermeswebui /app || error_exit "Failed to set owner of /app to hermeswebui user"
   rsync -av --chown=hermeswebui:hermeswebui /apptoo/ /app/ || error_exit "Failed to sync /apptoo to /app with correct ownership"
 
+  # Persistent Railway volumes may be root-owned. Prepare the configured auth
+  # state path in the root init phase, before dropping privileges to hermeswebui.
+  if [ -n "${HERMES_WEBUI_STATE_DIR:-}" ]; then
+    mkdir -p "$HERMES_WEBUI_STATE_DIR" || error_exit "Failed to create state directory at $HERMES_WEBUI_STATE_DIR"
+    chown -R "${WANTED_UID}:${WANTED_GID}" "$HERMES_WEBUI_STATE_DIR" || error_exit "Failed to set owner of state directory at $HERMES_WEBUI_STATE_DIR"
+  fi
+
   if [ -z "${HERMES_WEBUI_DEFAULT_WORKSPACE+x}" ]; then export HERMES_WEBUI_DEFAULT_WORKSPACE="/workspace"; fi
   if [ ! -d "$HERMES_WEBUI_DEFAULT_WORKSPACE" ]; then
     mkdir -p "$HERMES_WEBUI_DEFAULT_WORKSPACE" || error_exit "Failed to create default workspace at $HERMES_WEBUI_DEFAULT_WORKSPACE"
@@ -372,11 +379,6 @@ if [ -z "${HERMES_WEBUI_STATE_DIR+x}" ]; then error_exit "HERMES_WEBUI_STATE_DIR
 echo "-- HERMES_WEBUI_STATE_DIR: $HERMES_WEBUI_STATE_DIR"
 if [ ! -d "$HERMES_WEBUI_STATE_DIR" ]; then mkdir -p "$HERMES_WEBUI_STATE_DIR" || error_exit "Failed to create state directory at $HERMES_WEBUI_STATE_DIR"; fi
 if [ ! -d "$HERMES_WEBUI_STATE_DIR" ]; then error_exit "HERMES_WEBUI_STATE_DIR directory does not exist at $HERMES_WEBUI_STATE_DIR"; fi
-# Railway volumes are mounted root-owned. Prepare the mounted state directory
-# while still in the root init phase, then verify it after dropping privileges.
-if [ "A${whoami}" == "Aroot" ]; then
-  chown -R "${WANTED_UID}:${WANTED_GID}" "$HERMES_WEBUI_STATE_DIR" || error_exit "Failed to grant runtime user access to state directory at $HERMES_WEBUI_STATE_DIR"
-fi
 it="$HERMES_WEBUI_STATE_DIR/.testfile"; touch "$it" || error_exit "Failed to verify state directory at $HERMES_WEBUI_STATE_DIR"
 rm -f $it || error_exit "Failed to delete test file in $HERMES_WEBUI_STATE_DIR"
 
