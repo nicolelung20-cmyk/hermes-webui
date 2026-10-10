@@ -12,5 +12,9 @@
 ## Core skills
 - [skill-creator](skills/skill-creator/SKILL.md) — create, maintain, validate, version, and index skills with content-first freshness handling.
 
+## Research and revenue
+- [supergrok](skills/supergrok/SKILL.md) — optional SuperGrok/Grok research lane for current public evidence, X signal review when authorized, red-team reasoning, and verified decisions.
+- [grok-x-revenue-builder](skills/grok-x-revenue-builder/SKILL.md) — validate free-first digital product and automated-service opportunities and build measurable revenue experiments.
+
 ## Index policy
 This file is an inventory/metadata layer, not the source of truth for skill behavior. Do not edit skill behavior only here; make changes in the corresponding skill file first and then refresh this index.
