@@ -3,6 +3,7 @@ set -euo pipefail
 
 # Restores into a separately identified disposable database. Never use production as target.
 # Required:
+#   SOURCE_DATABASE_URL=... (read-only identity check only; never printed)
 #   MIGRATION_TARGET_DATABASE_URL=... (isolated disposable target)
 #   MIGRATION_TARGET_DATABASE_NAME=... (expected target database name)
 #   ALLOW_DISPOSABLE_RESTORE=YES
@@ -21,12 +22,19 @@ command -v psql >/dev/null 2>&1 || { echo "FAIL: psql is required" >&2; exit 1; 
   echo "STOP: set ALLOW_DISPOSABLE_RESTORE=YES only after independently confirming the target is disposable." >&2
   exit 3
 }
+: "${SOURCE_DATABASE_URL:?Set SOURCE_DATABASE_URL for a read-only source/target identity comparison}"
 : "${MIGRATION_TARGET_DATABASE_URL:?Set MIGRATION_TARGET_DATABASE_URL to an isolated disposable database}"
 : "${MIGRATION_TARGET_DATABASE_NAME:?Set MIGRATION_TARGET_DATABASE_NAME to the expected target database name}"
 
-# Parse the target database identity without printing the URL (which may contain credentials).
+# Query identities only; never echo connection URLs or credentials.
+source_identity=$(psql "$SOURCE_DATABASE_URL" -X -Atqc "select coalesce(inet_server_addr()::text,'local') || ':' || inet_server_port()::text || '/' || current_database()")
+target_identity=$(psql "$MIGRATION_TARGET_DATABASE_URL" -X -Atqc "select coalesce(inet_server_addr()::text,'local') || ':' || inet_server_port()::text || '/' || current_database()")
 target_db=$(psql "$MIGRATION_TARGET_DATABASE_URL" -X -Atqc 'select current_database()')
 target_user=$(psql "$MIGRATION_TARGET_DATABASE_URL" -X -Atqc 'select current_user')
+
+[[ "$source_identity" != "$target_identity" ]] || {
+  echo "STOP: source and target resolve to the same server/database identity." >&2; exit 4;
+}
 [[ "$target_db" == "$MIGRATION_TARGET_DATABASE_NAME" ]] || {
   echo "STOP: connected database name does not match MIGRATION_TARGET_DATABASE_NAME." >&2; exit 4;
 }
