@@ -285,6 +285,7 @@ if [ "A${whoami}" == "Aroot" ]; then
     # Ensure the runtime owner can write session/passkey state even if the
     # persistent volume's pre-existing directory mode was read-only.
     chmod 700 "$HERMES_WEBUI_STATE_DIR" || error_exit "Failed to secure state directory at $HERMES_WEBUI_STATE_DIR"
+    echo "-- Persistent state directory ready for runtime UID/GID ${WANTED_UID}:${WANTED_GID}"
   fi
 
   if [ -z "${HERMES_WEBUI_DEFAULT_WORKSPACE+x}" ]; then export HERMES_WEBUI_DEFAULT_WORKSPACE="/workspace"; fi
