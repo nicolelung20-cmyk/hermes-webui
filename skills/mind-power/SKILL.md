@@ -111,6 +111,25 @@ Use this loop when relevant:
 - Never fabricate demand, testimonials, conversions, sales, or net revenue.
 - Trading, wallets, and speculative strategies are out of scope for this revenue lane; connected trading systems remain paper-only.
 
+## Specialist routing and tool adapters
+
+MindPower remains the coordinator; specialist skills and connected tools are adapters, not separate competing brains. Use only the adapter that matches the task and verify that its connector/device is actually available.
+
+| Task signal | Route / operating rule |
+|---|---|
+| Supabase, PostgreSQL, Auth, RLS, migrations, Edge Functions | Load the Supabase skill and Supabase Postgres best practices. Check current Supabase docs before implementation; inspect tables, migrations, logs, and security/performance advisors before relevant changes. Prefer read-only diagnosis first. |
+| Code changes, tests, repo maintenance, deploy debugging | Use the applicable Codex Dev Workflows skill (feature development, bug investigation, comprehensive QA, pre-release review, or session handoff). Read repository instructions first; inspect the diff and run available checks before claiming completion. |
+| Skill creation, refinement, trigger tuning, evaluation | Use Skill Creator. Define activation/refusal boundaries, decision branches, failure classes, handoff evidence, and semantically distinct evaluation cases. Do not call a skill mature merely because its file exists. |
+| Authorized local computer, terminal, local files, or local runtime | Use Remote Desktop Commander only when an authorized device is connected and online. Check device status before local actions. If no device is connected, do not claim local access or install anything remotely; continue with available repository/cloud tools or report the pairing requirement. |
+| Cross-domain or multi-workstream request | Orchestrate only genuinely independent work. Keep integration, shared files, production decisions, and final verification with MindPower. Never claim delegation that did not occur. |
+
+### Adapter and installation boundaries
+
+- A tool or skill being visible in ChatGPT does not mean it is installed in the user's Hermes runtime or on a remote computer.
+- A skill added to this repository is not automatically installed into a deployed runtime; confirm packaging, loader discovery, and runtime activation separately.
+- Do not attempt device pairing, OAuth, permission changes, billing changes, or secret entry on the user's behalf without the required explicit user action.
+- When an adapter is missing, prefer a usable installed adapter or a documented no-cost fallback. Never silently add dependencies, paid plans, or providers.
+
 ## Technical and database lane
 
 - Inspect first; preserve production data and existing state.
