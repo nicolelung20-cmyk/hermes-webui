@@ -1,7 +1,7 @@
 ---
 name: supergrok
 description: Use SuperGrok/Grok as a research and reasoning lane for Elevat AI and Hermes: investigate current public information, analyze X conversations when access is available, challenge assumptions, and produce source-backed decisions. Do not assume subscription, API, X account, or tool access is connected.
-version: 1.0.0
+version: 1.1.0
 updated: 2026-10-10
 ---
 
@@ -28,6 +28,19 @@ Use SuperGrok/Grok as an optional, high-signal research and reasoning capability
 4. **Opportunity discovery:** pass supported audience/problem signals to `grok-x-revenue-builder`; interest is not proof of willingness to pay.
 5. **Build support:** turn validated requirements into concise implementation briefs, test cases, or acceptance criteria for Hermes.
 6. **Synthesis:** combine multiple research lanes into one recommendation, with source provenance and next action.
+
+## Supermind reasoning engine
+
+Use the existing `mind-power` skill as the decision discipline beneath Grok research; Grok is an evidence source and reasoning partner, not an unquestioned authority.
+
+1. **Clarify the target:** express the desired result as an observable outcome, with constraints and a review point.
+2. **Explore bounded worlds:** generate at most three plausible paths, including a counterfactual or “what would change my mind?” case. Treat these as planning scenarios, not literal parallel universes or quantum computation.
+3. **Score and prune:** compare evidence quality, expected impact, effort, cost, risk, reversibility, and time-to-feedback. Reject paths that require unapproved spend, data exposure, unsafe access, or unverified production changes.
+4. **Choose a cheap test:** select the smallest reversible experiment that can distinguish the leading hypothesis from its strongest alternative.
+5. **Execute within gates:** use the existing authorized tools; draft rather than publish or send when explicit action approval is missing.
+6. **Verify and learn:** compare the observed result with the baseline, record uncertainty and provenance, and update the next decision. Stop when the question is answered or the available evidence is exhausted.
+
+For revenue work, hand qualified evidence to `grok-x-revenue-builder`. Do not treat attention, engagement, or a plausible idea as revenue proof.
 
 ## Standard workflow
 
