@@ -11,6 +11,7 @@
 
 ## Core skills
 - [skill-creator](skills/skill-creator/SKILL.md) — create, maintain, validate, version, and index skills with content-first freshness handling.
+- [mind-power](skills/mind-power/SKILL.md) — evidence-based focus, prioritization, mental models, small experiments, and measurable follow-through.
 
 ## Research and revenue
 - [supergrok](skills/supergrok/SKILL.md) — optional SuperGrok/Grok research lane for current public evidence, X signal review when authorized, red-team reasoning, and verified decisions.
