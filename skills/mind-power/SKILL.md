@@ -1,7 +1,7 @@
 ---
 name: mind-power
 description: "Unified offline-first operating core for Elevat AI and Hermes. Route reasoning, research, revenue experiments, implementation, private-vault workflows, and verification through one bounded decision loop. Use whenever the user says MindPower on/activate, or asks Hermes/Elevat to coordinate work. External AI providers are optional lanes, never the root of trust."
-version: 2.0.0
+version: 2.1.0
 updated: 2026-10-10
 ---
 
