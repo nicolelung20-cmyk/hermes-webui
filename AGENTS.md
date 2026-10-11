@@ -155,3 +155,8 @@ python3 bootstrap.py
 
 Do not include private machine instructions in this tracked file. Use a
 git-ignored local note for personal workflow details.
+
+## Outcome-first autonomous execution (applies to every task)
+
+Before acting, read `skills/outcome-first-autonomous-execution/SKILL.md` and follow it for all tasks in this repository. Resolve intent from context, inspect before changing, batch safe independent work, avoid unnecessary check-ins, and verify the actual end-to-end outcome. Prefer no-cost options. Ask for approval only at the skill's consequential-action gates. Never claim a change is deployed, secure, profitable, or complete without direct evidence. For business tasks, prioritize validated customer demand and cash actually collected over more infrastructure. This instruction governs all agents and all task types working in this repository.
+
