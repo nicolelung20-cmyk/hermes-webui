@@ -11,7 +11,7 @@
 
 ## Core skills
 - [skill-creator](skills/skill-creator/SKILL.md) — create, maintain, validate, version, and index skills with content-first freshness handling.
-- [mind-power](skills/mind-power/SKILL.md) — v2.2.0: unified coordinator with universal, idempotent skill installation/update, compatibility checks, per-target verification, and controlled rollout.
+- [mind-power](skills/mind-power/SKILL.md) — v2.3.0: unified coordinator with verified deployment recovery, revenue-state evidence, universal skill rollout boundaries, and controlled production promotion.
 
 ## Research and revenue
 - [supergrok](skills/supergrok/SKILL.md) — v1.1.0: Grok research built on the Supermind reasoning loop: bounded scenarios, score/prune, cheap experiments, evidence, and verification.
