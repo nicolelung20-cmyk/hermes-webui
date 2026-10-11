@@ -14,7 +14,7 @@
 - [mind-power](skills/mind-power/SKILL.md) — evidence-based focus, prioritization, mental models, small experiments, and measurable follow-through.
 
 ## Research and revenue
-- [supergrok](skills/supergrok/SKILL.md) — optional SuperGrok/Grok research lane for current public evidence, X signal review when authorized, red-team reasoning, and verified decisions.
+- [supergrok](skills/supergrok/SKILL.md) — v1.1.0: Grok research built on the Supermind reasoning loop: bounded scenarios, score/prune, cheap experiments, evidence, and verification.
 - [grok-x-revenue-builder](skills/grok-x-revenue-builder/SKILL.md) — validate free-first digital product and automated-service opportunities and build measurable revenue experiments.
 
 ## Index policy
