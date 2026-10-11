@@ -32,7 +32,7 @@ def emit_request_log(message: str) -> None:
         with _LOCK:
             if now - _WINDOW_STARTED >= 1.0:
                 if _DROPPED_COUNT:
-                    _STREAM.write(f"[webui] dropped {_DROPPED_COUNT} excess request logs\\n")
+                    _STREAM.write(f"[webui] dropped {_DROPPED_COUNT} excess request logs\n")
                 _WINDOW_STARTED = now
                 _WINDOW_COUNT = 0
                 _DROPPED_COUNT = 0
@@ -40,7 +40,7 @@ def emit_request_log(message: str) -> None:
                 _DROPPED_COUNT += 1
                 return
             _WINDOW_COUNT += 1
-            _STREAM.write(message + "\\n")
+            _STREAM.write(message + "\n")
             _STREAM.flush()
     except Exception:
         pass
