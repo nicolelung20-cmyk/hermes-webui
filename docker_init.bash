@@ -277,8 +277,8 @@ if [ "A${whoami}" == "Aroot" ]; then
   chown hermeswebui:hermeswebui /app || error_exit "Failed to set owner of /app to hermeswebui user"
   rsync -av --chown=hermeswebui:hermeswebui /apptoo/ /app/ || error_exit "Failed to sync /apptoo to /app with correct ownership"
 
-  # Persistent Railway volumes may be root-owned. Prepare the configured auth
-  # state path in the root init phase, before dropping privileges to hermeswebui.
+  # Persistent Railway volumes may be root-owned. Repair ownership and permissions
+  # for the configured auth state path before dropping privileges to hermeswebui.
   if [ -n "${HERMES_WEBUI_STATE_DIR:-}" ]; then
     mkdir -p "$HERMES_WEBUI_STATE_DIR" || error_exit "Failed to create state directory at $HERMES_WEBUI_STATE_DIR"
     chown -R "${WANTED_UID}:${WANTED_GID}" "$HERMES_WEBUI_STATE_DIR" || error_exit "Failed to set owner of state directory at $HERMES_WEBUI_STATE_DIR"
