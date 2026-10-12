@@ -156,6 +156,37 @@ python3 bootstrap.py
 Do not include private machine instructions in this tracked file. Use a
 git-ignored local note for personal workflow details.
 
+## Privacy-first integration policy (ANNE)
+
+For privacy, data-sharing, connector, account-linking, permission, or agent
+autonomy tasks, follow the enabled ANNE privacy skills in Notion when available.
+At the start of a session, fetch the user's enabled Notion skills if that
+connector is available; if unavailable, apply this section without claiming the
+skills were loaded.
+
+- Prefer local/offline processing. Before an external call, identify the
+  provider, purpose, data leaving the local boundary, and minimum payload.
+- Never transmit secrets, credentials, private keys, access tokens, or unrelated
+  personal data in prompts, logs, issues, commits, or tool payloads.
+- Inspect the exact integration and its supported controls before changing it.
+  Keep integrations installed where practical; use a real supported disconnect
+  or session-revoke control for idle integrations when available.
+- Do not simulate disconnection or claim an integration is idle-disconnected
+  when no supported control exists. Do not uninstall an integration as a
+  substitute for disconnection unless removal was explicitly requested.
+- Reconnect only when the current task requires that provider and the user has
+  requested the task. Use least privilege and the most restrictive supported
+  permission mode. Ask before broad permission changes, external publication,
+  destructive operations, or sensitive production changes.
+- Read before write; use the narrowest reversible change. Preserve auth, RLS,
+  secret boundaries, and production safeguards. Keep service-role credentials
+  server-side and payment/trading paths in test mode unless live actions are
+  explicitly authorized.
+- Verify changes by reading back the resulting state or running a harmless
+  independent check. Report verified, partially verified, blocked, and not
+  attempted separately. Never claim zero data-sharing or provider-side deletion
+  without direct evidence.
+
 ## Outcome-first autonomous execution (applies to every task)
 
 Before acting, read `skills/outcome-first-autonomous-execution/SKILL.md` and follow it for all tasks in this repository. Preserve the user's ultimate goal at full intended scope: never shrink or redefine it as the smallest result. Break execution into milestones only as a strategy for reaching the full vision. Resolve intent from context, inspect before changing, batch safe independent work, avoid unnecessary check-ins, and verify the actual end-to-end outcome. Prefer no-cost options. Ask for approval only at the skill's consequential-action gates. Never claim a change is deployed, secure, profitable, or complete without direct evidence. For business tasks, pursue the full business objective and measure actual demand, purchases, and cash collected. This instruction governs all agents and all task types working in this repository.
