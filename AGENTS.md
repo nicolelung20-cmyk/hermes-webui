@@ -85,15 +85,15 @@ Follow that checklist's safety rules:
   registration must also check its retained cancel event and live stream
   membership: Stop can remove CANCEL_FLAGS during initialization.
   Do not re-register a cancelled worker; finalize outside the stream lock.
-  Local Steer accepts only explicit starting/running phases. Close admission
-  by publishing finalizing under STREAMS_LOCK before the last pending-steer
-  drain; earlier accepted guidance is drained, later guidance is rejected with
-  `not_running` while the owned stream is still live (not `stream_dead`). Use
-  one idempotent terminal settlement before done/error/end and final cleanup,
-  covering returned errors, exceptions and self-heal, not only the success path.
-  Merge Agent-returned `pending_steer` with the registered worker's final slot
-  drain and emit leftovers before terminal events, outside registry locks.
-  Test both drain/Steer orderings, including compression-rotated identities.
+  Close admission by publishing finalizing under STREAMS_LOCK before the last
+  pending-steer drain; earlier accepted guidance is drained, later guidance is
+  rejected with `not_running` while the owned stream is still live (not
+  `stream_dead`). Use one idempotent terminal settlement before done/error/end
+  and final cleanup, covering returned errors, exceptions and self-heal, not
+  only the success path. Merge Agent-returned `pending_steer` with the registered
+  worker's final slot drain and emit leftovers before terminal events, outside
+  registry locks. Test both drain/Steer orderings, including compression-rotated
+  identities.
 - Inactive-session recovery is separate from live Steer. Resolve durable
   compression lineage in the session's profile database, read-only, even when
   the WebUI sidecar has no snapshot flag. Never reopen a sealed parent. Reject
@@ -104,6 +104,37 @@ Follow that checklist's safety rules:
   in both the `rsync` and `cp -a` paths — `/opt/hermes` may contain subdirectories
   with restricted permissions (e.g. `.playwright/`).
 
+## Privacy-first integration policy (ANNE)
+
+For privacy, data-sharing, connector, account-linking, permission, or agent
+autonomy tasks, follow the enabled ANNE privacy skills in Notion when available.
+At the start of a session, fetch the user's enabled Notion skills if that
+connector is available; if unavailable, apply this section without claiming the
+skills were loaded.
+
+- Prefer local/offline processing. Before an external call, identify the
+  provider, purpose, data leaving the local boundary, and minimum payload.
+- Never transmit secrets, credentials, private keys, access tokens, or unrelated
+  personal data in prompts, logs, issues, commits, or tool payloads.
+- Inspect the exact integration and its supported controls before changing it.
+  Keep integrations installed where practical; use a real supported disconnect
+  or session-revoke control for idle integrations when available.
+- Do not simulate disconnection or claim an integration is idle-disconnected
+  when no supported control exists. Do not uninstall an integration as a
+  substitute for disconnection unless removal was explicitly requested.
+- Reconnect only when the current task requires that provider and the user has
+  requested the task. Use least privilege and the most restrictive supported
+  permission mode. Ask before broad permission changes, external publication,
+  destructive operations, or sensitive production changes.
+- Read before write; use the narrowest reversible change. Preserve auth, RLS,
+  secret boundaries, and production safeguards. Keep service-role credentials
+  server-side and payment/trading paths in test mode unless live actions are
+  explicitly authorized.
+- Verify changes by reading back the resulting state or running a harmless
+  independent check. Report verified, partially verified, blocked, and not
+  attempted separately. Never claim zero data-sharing or provider-side deletion
+  without direct evidence.
+
 ## Completion and verification
 
 A change is ready for review when:
@@ -111,8 +142,8 @@ A change is ready for review when:
 - The requested scope is implemented, with related call sites and lifecycle
   paths covered or explicitly identified as out of scope; unrelated cleanup is absent.
 - Behavior changes have observable regression evidence where practical, including
-  proof that a bug-fix test fails before the fix and passes after it. Evidence covers
-  affected and neighboring tests, not only new tests.
+  proof that a bug-fix test fails before the fix and passes after it. Evidence
+  covers affected and neighboring tests, not only new tests.
 - State changes identify the authoritative value and its owner, use that value
   through decision, action, and persistence, and account for cleanup on every exit.
   Fallbacks and defaults extend the existing mechanism rather than duplicate it.
@@ -158,5 +189,4 @@ git-ignored local note for personal workflow details.
 
 ## Outcome-first autonomous execution (applies to every task)
 
-Before acting, read `skills/outcome-first-autonomous-execution/SKILL.md` and follow it for all tasks in this repository. Preserve the user's ultimate goal at full intended scope: never shrink or redefine it as the smallest result. Break execution into milestones only as a strategy for reaching the full vision. Resolve intent from context, inspect before changing, batch safe independent work, avoid unnecessary check-ins, and verify the actual end-to-end outcome. Prefer no-cost options. Ask for approval only at the skill's consequential-action gates. Never claim a change is deployed, secure, profitable, or complete without direct evidence. For business tasks, pursue the full business objective and measure actual demand, purchases, and cash collected. This instruction governs all agents and all task types working in this repository.
-
+Before acting, read `skills/outcome-first-autonomous-execution/SKILL.md` and follow it for all tasks in this repository. Preserve the user's ultimate goal at full intended scope: never shrink or redefine it as the smallest result. Break execution into milestones only as a strategy for reaching the full vision. Resolve intent from context, inspect before changing, batch safe independent work, avoid unnecessary check-ins, and verify the actual end-to-end outcome. Prefer no-cost options. Ask for approval only at the skill's consequential-action gates. Never claim a change is deployed, secure, profitable, or complete without direct evidence. For business tasks, pursue the full business objective and measure actual demand, purchases, and cash collected. Technical activity is not revenue; never promise profitability or invent results. This instruction governs all agents and all task types working in this repository.
