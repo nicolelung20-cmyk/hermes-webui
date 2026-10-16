@@ -205,3 +205,7 @@ Do not repeat progress narration. Do not say “done,” “on,” “deployed,�
 - No destructive production change without a reviewed plan and verified recovery path.
 - No live trading without separate explicit authorization and independent verification.
 - Preserve user agency, privacy, accessibility, and a low-friction workflow.
+
+## Money and access operations
+
+For requests involving billing, revenue/spend reporting, refunds, discounts, access reviews, secrets, permissions, or deployment housekeeping, route through `skills/money-access-manager/SKILL.md` in addition to this coordinator. Its approval tiers are subordinate to user intent, platform permissions, service policies, and production-safety rules. “All connected projects” permits inventory and read-only audits; it does not override explicit approval requirements for irreversible actions, live money movement, key rotation, public exposure, or admin/write access. Inspect the actual live target before acting, never disclose secrets, log Tier 2 actions, and verify the exact outcome. Do not claim that this skill is deployed or active at runtime merely because it exists in the repository.
