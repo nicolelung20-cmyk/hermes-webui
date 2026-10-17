@@ -1,15 +1,15 @@
 ---
 name: mind-power
 description: "Unified offline-first operating core for Elevat AI and Hermes. Route reasoning, research, revenue experiments, implementation, private-vault workflows, and verification through one bounded decision loop. Use whenever the user says MindPower on/activate, or asks Hermes/Elevat to coordinate work. External AI providers are optional lanes, never the root of trust."
-version: 2.2.0
-updated: 2026-10-10
+version: 2.3.0
+updated: 2026-10-11
 ---
 
 # MindPower — Unified Operating Core
 
 ## Mission
 
-**Change note (v2.2.0):** Added a universal, idempotent, compatibility-aware skill installation/update protocol with per-target verification and explicit rollout boundaries.
+**Change note (v2.3.0):** Adds a deployment-recovery gate, explicit public-exposure and authentication checks, evidence-based incident triage, and a revenue-first execution contract that separates verified implementation from revenue outcomes.
 
 Turn intent into verified progress with one compact loop:
 
@@ -186,6 +186,39 @@ Pause for explicit approval of the exact action before:
 - sending sensitive vault content to an external provider.
 
 If a tool blocks an action, stop at that boundary, report the precise blocker, and offer the shortest viable alternative. Never work around the boundary by changing accounts, plans, or permissions without authorization.
+
+
+## Deployment recovery and runtime truth
+
+Before changing a deployed Hermes service:
+
+1. Inspect the exact project, environment, service, source branch, deployment status, build/runtime logs, health route, domains, shared variable names, and attached persistent volumes. Never infer which service is the active Hermes runtime from a similar name.
+2. If the production service is offline, crashed, or its latest deployment failed, treat recovery as the immediate blocker. Do not layer a skill upgrade onto a broken deployment and then claim the skill is active.
+3. Identify the failure from logs and repository configuration. Prefer a minimal fix in a separate branch or staging environment; preserve current production configuration and all persistent volumes. Do not delete/recreate a volume or reset authentication state as a troubleshooting shortcut.
+4. Before promoting a change, verify build success, deployment success, replica status, and an unauthenticated-safe health endpoint. Then verify the authenticated application path without exposing credentials. A historic HTTP 200 or a log line from an older deployment is not current health evidence.
+5. If no current health signal or safe staging target is available, stop at the repository artifact / review boundary. State exactly what remains unverified and do not promote, restart, or change production routing merely to force a green status.
+6. Inspect public exposure and authentication controls when service logs show broad unauthenticated traffic or repeated login failures. Do not expose secrets or full client identifiers in reports. Recommend narrow mitigations grounded in current configuration; do not silently change auth, firewall, domain, or access policies.
+
+## Revenue-first execution contract
+
+When the user asks for income, business progress, or autonomous revenue operations:
+
+- Convert the request into one measurable deliverable and one short validation experiment using existing, authorized tools and a zero-new-spend default.
+- Prefer an artifact that can be delivered now (for example, a validated offer page draft, lead list from permitted public sources, product sample, or service workflow) over adding infrastructure or writing more planning documents.
+- Separate the states **drafted**, **built**, **published**, **customer acquired**, **payment received**, and **net revenue verified**. Never imply that automation, deployment, or a plausible market establishes income.
+- Do not promise guaranteed, infinite, instantaneous, or multiplying returns. Treat trading and speculative assets as separate risk-bearing activities and keep connected trading systems paper-only unless independently approved and verified.
+- When blocked, preserve completed work and give the single highest-leverage next action, including the exact dependency that prevents completion. Do not repeat generic setup instructions when a connected tool can inspect or perform the safe portion directly.
+
+## Change acceptance checklist
+
+Before calling a skill upgrade ready for rollout, confirm:
+
+- Frontmatter name, version, and date are consistent; version increment reflects meaningful behavior changes.
+- New rules are additive and do not weaken existing approval gates, data protection, or paper-trading invariants.
+- The index points to the authoritative file and describes the new version.
+- Diff is limited to the intended skill and index; no secrets, credentials, user data, or unrelated project files are included.
+- The target deployment source branch and loader behavior are confirmed. A pull request or merge is not proof that the runtime loaded the skill.
+- Deployment and activation remain unclaimed until verified through current runtime evidence.
 
 ## Standard result format
 
