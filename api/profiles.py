@@ -40,6 +40,10 @@ _CLONE_CONFIG_FILES = ['config.yaml', '.env', 'SOUL.md']
 # startup control: a pinned profile's .env may be loaded into live os.environ
 # later, but must not be able to change whether the process is isolated.
 _INITIAL_HERMES_HOME = os.getenv('HERMES_HOME', '').strip()
+# Launcher/deployment env before any profile .env is applied (init_profile_state
+# runs after this import). A root-profile read layers the root .env over this
+# instead of the live os.environ, which holds the switched-to profile's .env.
+_INITIAL_PROCESS_ENV = dict(os.environ)
 _INITIAL_ISOLATED_PROFILE_OPT_IN = os.getenv('HERMES_WEBUI_ISOLATED_PROFILE', '').strip().lower()
 _ISOLATED_SYMLINK_WARNING_EMITTED = False
 _ISOLATED_PROFILE_SHAPE_WITHOUT_OPT_IN_WARNING_EMITTED = False
@@ -403,6 +407,11 @@ def _read_active_profile_file() -> str:
 _root_profile_name_cache: set[str] = {'default'}
 _root_profile_name_cache_lock = threading.Lock()
 _root_profile_name_cache_loaded = False
+
+
+def _root_profile_names_snapshot() -> set[str] | None:
+    with _root_profile_name_cache_lock:
+        return {str(name) for name in _root_profile_name_cache} if _root_profile_name_cache_loaded else None
 
 
 def _invalidate_root_profile_cache() -> None:
@@ -1362,6 +1371,92 @@ def profile_env_for_background_worker(
 
 
 @contextmanager
+def profile_env_for_thread_readonly(
+    session,
+    purpose: str = "thread-local read",
+    logger_override: Optional[logging.Logger] = None,
+    *,
+    include_root: bool = False,
+):
+    """Bind a session profile's env to the CURRENT THREAD only.
+
+    For pure reads that resolve through the thread-local channel
+    (``api.config._thread_ctx`` via ``_expand_env_vars`` /
+    ``_thread_local_env_value``) and must NOT mutate process-wide
+    ``os.environ``. ``profile_env_for_background_worker`` mirrors the
+    profile env into ``os.environ`` because agent bodies still have
+    Hermes readers that call ``os.getenv()`` directly; its ``_ENV_LOCK``
+    covers setup/restore only, not the body, so two interleaved scopes
+    (e.g. an HTTP handler thread and a concurrent streaming worker)
+    restore over each other's mirrored env. A pure read needs no such
+    mirror: binding ``_thread_ctx`` alone is sufficient, and the state is
+    per-thread, so concurrent requests on other threads never interfere.
+
+    Like the background worker, the scope sets
+    ``block_process_env_fallback`` so a ``${VAR}`` that only the server
+    process env defines does NOT expand for a named profile (fail-closed
+    profile isolation). Callers that feed the expanded result to an
+    outbound request must treat any value that still contains ``${...}``
+    after expansion as absent (see
+    ``api.streaming._drop_unresolved_routing_refs``) instead of forwarding
+    the literal.
+
+    Accepts a session-like object with ``.profile`` or a profile name.
+    No-ops for default-profile sessions unless ``include_root`` is set:
+    after a process-wide profile switch ``os.environ`` holds the switched-to
+    profile's ``.env``, so callers that must resolve a root session's own
+    ``${VAR}`` bind the root env explicitly: the launcher env captured at
+    import (``_INITIAL_PROCESS_ENV``) with the root home's runtime env over
+    it, matching what the root profile sees when it is active. On resolution
+    failure it logs and yields with the thread's current env state untouched.
+    """
+    log = logger_override or logger
+    raw_profile = session if isinstance(session, str) else getattr(session, "profile", "")
+    profile = str(raw_profile or "").strip()
+    if not profile or (profile == "default" and not include_root):
+        yield
+        return
+
+    try:
+        # Lazy import avoids a module-load cycle: api.config imports
+        # api.profiles at module level.
+        from api.config import _thread_ctx
+
+        profile_home_path = Path(get_hermes_home_for_profile(profile))
+        runtime_env = get_profile_runtime_env(profile_home_path)
+        safe_runtime_env = filter_runtime_env_for_gateway_parity(runtime_env)
+    except Exception:
+        log.debug(
+            "Failed to resolve profile env for %s profile %s; keeping the "
+            "thread's current env",
+            purpose,
+            profile,
+            exc_info=True,
+        )
+        yield
+        return
+
+    previous_env = getattr(_thread_ctx, "env", {})
+    previous_env = dict(previous_env) if isinstance(previous_env, dict) else {}
+    previous_block = bool(getattr(_thread_ctx, "block_process_env_fallback", False))
+    # Any name that resolves to the root home (the legacy "default" or a renamed root alias, #1612) layers
+    # the root .env over the launcher snapshot, exactly like "default".
+    thread_env = dict(_INITIAL_PROCESS_ENV) if _is_root_profile(profile) else {}
+    thread_env.update(safe_runtime_env)
+    thread_env["HERMES_HOME"] = str(profile_home_path)
+    try:
+        _thread_ctx.env = thread_env
+        _thread_ctx.block_process_env_fallback = True
+        yield
+    finally:
+        _thread_ctx.block_process_env_fallback = previous_block
+        if previous_env:
+            _thread_ctx.env = previous_env
+        else:
+            _thread_ctx.env = {}
+
+
+@contextmanager
 def profile_env_for_active_request_readonly(
     purpose: str = "provider/model read",
     logger_override: Optional[logging.Logger] = None,
@@ -1734,8 +1829,10 @@ def switch_profile(name: str, *, process_wide: bool = True) -> dict:
         if not home.is_dir():
             raise ValueError(f"Profile '{name}' does not exist.")
 
+    # The skill-stats cache is deliberately left alone here (#7940). A profile's
+    # counts come from its own config.yaml and SKILL.md files, so which profile
+    # is active changes none of them, and the mtime probe catches real changes.
     with _profile_lock:
-        _SKILLS_STATS_CACHE.clear()
         if process_wide:
             global _active_profile
             _active_profile = name
@@ -1839,7 +1936,7 @@ def switch_profile(name: str, *, process_wide: bool = True) -> dict:
     }
 
 
-_SKILLS_STATS_CACHE: dict[Path, tuple[int, int, int, float]] = {}
+_SKILLS_STATS_CACHE: dict[Path, tuple[int, int, int, float, str | None]] = {}
 _SKILLS_STATS_CACHE_TTL = 300.0  # seconds — long because .clear() handles programmatic changes
 
 # Per-profile compute locks (#5364). Without these, concurrent cold-startup
@@ -1866,6 +1963,21 @@ def _skills_stats_lock_for(profile_dir: Path) -> threading.Lock:
             lock = threading.Lock()
             _SKILLS_STATS_LOCKS[profile_dir] = lock
         return lock
+
+
+def _active_org_marker(skills_dir: Path) -> str | None:
+    """The org whose mirror counts, read the way the agent's index walk reads it.
+
+    None when there is no marker, or no agent to gate on it.
+    """
+    try:
+        from agent.skill_utils import read_active_org_id
+    except Exception:
+        return None
+    try:
+        return read_active_org_id(skills_dir)
+    except Exception:
+        return None
 
 
 def _skill_tree_max_mtime_ns(skills_dir: Path, config_path: Path) -> int:
@@ -2004,23 +2116,30 @@ def _get_profile_skills_stats(profile_dir: Path) -> tuple[int, int]:
     # Always run the cheap stat-only probe first — this is what catches an
     # out-of-band create/edit/delete within the same request (not after the TTL).
     current_mtime_ns = _skill_tree_max_mtime_ns(skills_dir, config_path)
+    current_org = _active_org_marker(skills_dir)
 
     # Read via .get() (not membership-check + index) so a concurrent
     # _SKILLS_STATS_CACHE.clear() on another thread can't raise KeyError
     # between the `in` test and the lookup.
     cached = _SKILLS_STATS_CACHE.get(profile_dir)
     if cached is not None:
-        enabled, compat, cached_mtime_ns, expiry = cached
+        enabled, compat, cached_mtime_ns, expiry, cached_org = cached
         # Fast path: files unchanged (by the cheap probe above) AND still within
         # the TTL → serve cached without re-reading any SKILL.md. The mtime probe
         # already ran, so an out-of-band change is caught immediately regardless
         # of the TTL. On TTL expiry we deliberately fall through to a full
         # recompute (the TTL is a safety net for mtime-preserving changes that
         # the probe can't see — e.g. a git checkout that restores the old mtime).
-        if current_mtime_ns == cached_mtime_ns and now < expiry:
+        # The active-org marker is carried IN the same tuple, so a reader never
+        # sees a new org beside stale counts (single atomic publish below).
+        if (
+            current_mtime_ns == cached_mtime_ns
+            and now < expiry
+            and cached_org == current_org
+        ):
             return enabled, compat
 
-    # Cache miss, mtime changed, or TTL expired — serialize per-profile so a
+    # Cache miss, mtime changed, active org changed, or TTL expired — serialize per-profile so a
     # burst of concurrent misses (cold startup) collapses to ONE compute instead
     # of a thundering herd of simultaneous os.walk + SKILL.md parses (#5364).
     lock = _skills_stats_lock_for(profile_dir)
@@ -2030,17 +2149,25 @@ def _get_profile_skills_stats(profile_dir: Path) -> tuple[int, int]:
         # still matches and the entry is within its TTL — no second compute.
         cached = _SKILLS_STATS_CACHE.get(profile_dir)
         if cached is not None:
-            enabled, compat, cached_mtime_ns, expiry = cached
-            if current_mtime_ns == cached_mtime_ns and time.time() < expiry:
+            enabled, compat, cached_mtime_ns, expiry, cached_org = cached
+            if (
+                current_mtime_ns == cached_mtime_ns
+                and time.time() < expiry
+                and cached_org == current_org
+            ):
                 return enabled, compat
 
         # Snapshot mtime BEFORE compute so any concurrent SKILL.md write during
         # the compute window causes a mismatch on the next probe instead of
         # silently serving stale data (TOCTOU).
         new_mtime_ns = _skill_tree_max_mtime_ns(skills_dir, config_path)
+        new_org = _active_org_marker(skills_dir)
         res = _compute_profile_skills_stats(profile_dir)
+        # Publish counts + mtime + org in ONE tuple assignment: a lock-free
+        # fast-path reader sees either the whole old entry or the whole new one,
+        # never a new org tag beside pre-rewrite counts.
         _SKILLS_STATS_CACHE[profile_dir] = (
-            res[0], res[1], new_mtime_ns, time.time() + _SKILLS_STATS_CACHE_TTL
+            res[0], res[1], new_mtime_ns, time.time() + _SKILLS_STATS_CACHE_TTL, new_org
         )
         return res
 
