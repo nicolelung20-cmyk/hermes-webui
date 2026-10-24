@@ -230,8 +230,12 @@ class SpendLedger:
                 db.rollback()
                 raise ValueError("provider_ref required for executed outcome")
             state = {"EXECUTED": "EXECUTED", "NOT_EXECUTED": "FAILED", "UNKNOWN": "UNKNOWN"}[outcome]
-            db.execute("UPDATE spend_requests SET state=?,provider_ref=COALESCE(?,provider_ref),failure=? WHERE id=?",
-                       (state, provider_ref, details[:500] or None, request_id))
+            reconciled_result = json.dumps({"provider_ref": provider_ref, "reconciled": True}, sort_keys=True) if outcome == "EXECUTED" else None
+            db.execute("""UPDATE spend_requests
+                SET state=?,provider_ref=COALESCE(?,provider_ref),failure=?,
+                    result=COALESCE(?,result)
+                WHERE id=?""",
+                       (state, provider_ref, details[:500] or None, reconciled_result, request_id))
             self._audit(db, request_id, principal.actor_id, "RECONCILED",
                         outcome=outcome, provider_ref=provider_ref, details=details[:500])
             db.commit()
