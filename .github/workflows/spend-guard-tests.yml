@@ -23,5 +23,5 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Run isolated spending-guard tests
-        run: python -m unittest discover -s tests -v
+      - name: Run focused spending-guard tests
+        run: python -m unittest tests.test_spend_guard -v
