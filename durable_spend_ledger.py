@@ -33,6 +33,14 @@ def _money(value):
     return amount.quantize(Decimal("0.01"))
 
 
+class _ClosingConnection(sqlite3.Connection):
+    def __exit__(self, exc_type, exc, tb):
+        try:
+            return super().__exit__(exc_type, exc, tb)
+        finally:
+            self.close()
+
+
 class SpendLedger:
     """SQLite-backed atomic approval/limit/idempotency ledger."""
 
@@ -71,7 +79,7 @@ class SpendLedger:
             """)
 
     def _connect(self):
-        db = sqlite3.connect(self.db_path, timeout=15, isolation_level=None)
+        db = sqlite3.connect(self.db_path, timeout=15, isolation_level=None, factory=_ClosingConnection)
         db.row_factory = sqlite3.Row
         db.execute("PRAGMA foreign_keys=ON")
         db.execute("PRAGMA busy_timeout=15000")
