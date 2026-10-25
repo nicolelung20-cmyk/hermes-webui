@@ -1,0 +1,39 @@
+name: FOMO Read-Only Research Brief
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Daily at 13:00 UTC (approx. 9 AM Eastern during daylight time).
+    - cron: "0 13 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generate read-only research brief
+        env:
+          FOMO_API_KEY: ${{ secrets.FOMO_API_KEY }}
+        run: |
+          mkdir -p output
+          python integrations/fomo_readonly_agent.py > output/fomo-research-brief.md
+
+      - name: Publish brief as a workflow artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fomo-research-brief
+          path: output/fomo-research-brief.md
+          if-no-files-found: error
+          retention-days: 14
