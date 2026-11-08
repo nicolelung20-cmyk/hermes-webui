@@ -2,56 +2,71 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#111315">
-<title>ANNE — Private Command Center</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#15191d">
+<title>ANNE — Private AI Command Center</title>
 <style>
-:root{color-scheme:dark;--bg:#101214;--panel:#181c20;--line:#30373d;--text:#edf0f2;--muted:#9aa4ac;--silver:#d0d6db;--good:#9bb9a6;--warn:#d5b987;--bad:#c58f8f}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 60% -20%,#293039 0,transparent 45%),var(--bg);color:var(--text);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
-main{max-width:1100px;margin:auto;padding:30px 20px 64px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:28px}.brand{display:flex;align-items:center;gap:12px}.mark{width:40px;height:40px;border:1px solid #78838c;border-radius:13px;display:grid;place-items:center;font-size:20px}.eyebrow{font-size:10px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase}.brand strong{letter-spacing:.18em}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:.12em}.toplinks{display:flex;gap:8px;flex-wrap:wrap}.link,.button{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border:1px solid var(--line);border-radius:9px;padding:9px 13px;color:var(--silver);background:#20252a;font:inherit;font-size:12px;cursor:pointer}.button.primary{background:#d8dee3;color:#15191d;border-color:#d8dee3;font-weight:650}.button:disabled{opacity:.45;cursor:not-allowed}.hero{padding:25px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(145deg,#1d2227,#15191c);margin-bottom:16px}.hero h1{font-size:26px;font-weight:480;letter-spacing:-.04em;margin:6px 0}.hero p{margin:0;color:var(--muted);max-width:690px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{border:1px solid var(--line);border-radius:13px;background:linear-gradient(145deg,#1b2024,#15191c);padding:19px;min-width:0}.card h2{font-size:13px;font-weight:600;margin:0}.head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:15px}.pill{font-size:10px;border:1px solid #394149;color:#b8c2ca;padding:4px 8px;border-radius:99px;white-space:nowrap}.pill.good{color:var(--good);border-color:#3d5147}.pill.warn{color:var(--warn);border-color:#574a37}.pill.bad{color:var(--bad);border-color:#594044}.stat{font-size:22px;letter-spacing:-.04em;margin:8px 0 2px}.muted{color:var(--muted);font-size:11px}.row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid #2a3035}.row:first-child{border-top:0;padding-top:0}.row b{font-size:12px;font-weight:550}.row small{display:block;color:var(--muted);font-size:11px;margin-top:2px}.select{width:100%;margin:10px 0 12px;padding:11px;border-radius:8px;border:1px solid #414a52;background:#111518;color:var(--text);font:inherit}.notice{padding:11px;border:1px solid #4b4130;background:#211f1a;color:#cbbb9f;border-radius:9px;font-size:11px;margin-top:14px}.error{color:var(--bad);font-size:12px;margin-top:10px;white-space:pre-wrap}.full{grid-column:1/-1}.footer{margin-top:20px;color:#77818a;font-size:10px}.loading{color:var(--muted);font-size:12px}.statusline{display:flex;align-items:center;gap:8px}.dot{width:7px;height:7px;border-radius:50%;background:#77828a;display:inline-block}
-@media(max-width:680px){main{padding:18px 13px 40px}.grid{grid-template-columns:1fr}.full{grid-column:auto}.top{align-items:flex-start;flex-direction:column}.hero h1{font-size:23px}}
+:root{color-scheme:dark;--bg:#15191d;--panel:#20252a;--panel2:#252b31;--line:#3a4249;--text:#eef1f3;--muted:#aab2b9;--silver:#d6dce1;--good:#bdc9c2;--warn:#d4c4a8;--bad:#d0aaaa}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 55% -18%,#38414a 0,transparent 44%),var(--bg);color:var(--text);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+main{max-width:1120px;margin:auto;padding:28px 20px 60px}.top{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:26px}.brand{display:flex;align-items:center;gap:12px}.mark{width:42px;height:42px;border:1px solid #929da6;border-radius:14px;display:grid;place-items:center;color:#e4e8eb;font-size:19px}.brand strong{letter-spacing:.2em}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:.13em}.links{display:flex;gap:8px;flex-wrap:wrap}.link,.button{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border:1px solid var(--line);border-radius:9px;padding:10px 14px;color:var(--silver);background:#252b30;font:inherit;font-size:12px;cursor:pointer}.button.primary{background:#dce1e5;color:#171b1f;border-color:#dce1e5;font-weight:650}.button:disabled{opacity:.42;cursor:not-allowed}.hero{padding:25px;border:1px solid var(--line);border-radius:17px;background:linear-gradient(145deg,#272e34,#1c2126);margin-bottom:16px}.eyebrow{font-size:10px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase}.hero h1{font-size:27px;font-weight:480;letter-spacing:-.045em;margin:7px 0}.hero p{margin:0;color:var(--muted);max-width:760px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{border:1px solid var(--line);border-radius:14px;background:linear-gradient(145deg,#242a30,#1d2227);padding:19px;min-width:0}.full{grid-column:1/-1}.head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:15px}.card h2{font-size:13px;font-weight:620;margin:0}.pill{font-size:10px;border:1px solid #465059;color:#c2cbd2;padding:4px 8px;border-radius:99px;white-space:nowrap}.pill.good{color:var(--good);border-color:#59655e}.pill.warn{color:var(--warn);border-color:#685d49}.pill.bad{color:var(--bad);border-color:#684e4e}.stat{font-size:22px;letter-spacing:-.04em;margin:8px 0 2px}.muted{color:var(--muted);font-size:11px}.select{width:100%;margin:7px 0 12px;padding:12px;border-radius:9px;border:1px solid #505a63;background:#171c20;color:var(--text);font:inherit}.field{display:block;margin-top:12px}.field:first-of-type{margin-top:0}.row{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-top:1px solid #343b41}.row:first-child{border-top:0;padding-top:0}.row b{font-size:12px;font-weight:560}.row small{display:block;color:var(--muted);font-size:11px;margin-top:2px}.notice{padding:12px;border:1px solid #5a5143;background:#292720;color:#d2c6ad;border-radius:9px;font-size:11px;margin-top:14px}.error{color:var(--bad);font-size:12px;margin-top:10px;white-space:pre-wrap}.success{color:var(--good)}.model-count{font-size:23px;letter-spacing:-.04em;margin:4px 0}.catalog{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}.provider{border:1px solid #3d454c;border-radius:9px;padding:10px;background:#1a1f23;min-width:0}.provider strong{font-size:12px}.provider small{display:block;color:var(--muted);font-size:10px;overflow-wrap:anywhere}.legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.legend span{font-size:10px;color:var(--muted)}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#bfc9c2;margin-right:5px}.dot.blocked{background:#a58f8f}.footer{margin-top:20px;color:#8d969d;font-size:10px}.buttonrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.statusgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.statusbox{padding:12px;border:1px solid #394148;border-radius:10px;background:#1b2024}.statusbox .muted{display:block}.statusbox strong{display:block;font-size:17px;font-weight:550;margin:4px 0}.hidden{display:none!important}
+@media(max-width:680px){main{padding:16px 12px 38px}.grid{grid-template-columns:1fr}.full{grid-column:auto}.top{align-items:flex-start;flex-direction:column}.hero{padding:20px}.hero h1{font-size:23px}.catalog{grid-template-columns:1fr}.statusgrid{grid-template-columns:1fr 1fr}.buttonrow .button{flex:1}}
 </style>
 </head>
 <body>
 <main>
 <header class="top">
-  <div class="brand"><div class="mark">A·</div><div><strong>ANNE</strong><small>PRIVATE COMMAND CENTER</small></div></div>
-  <nav class="toplinks"><a class="link" href="/">Hermes WebUI</a><a class="link" href="/login?next=%2Fstatic%2Fanne-console.html">Sign in</a></nav>
+  <div class="brand"><div class="mark">A·</div><div><strong>ANNE</strong><small>PRIVATE AI COMMAND CENTER</small></div></div>
+  <nav class="links"><a class="link" href="/">Open Hermes</a><a class="link" href="/login?next=%2Fstatic%2Fanne-console.html">Sign in</a></nav>
 </header>
 <section class="hero">
-  <div class="eyebrow">ANNE / LIVE CONTROL SURFACE</div>
-  <h1>One command center. Verified connections.</h1>
-  <p>ANNE coordinates intelligence. Hermes owns authenticated execution. Grok is selected through Hermes’ native xAI provider route. This page never stores provider credentials.</p>
+  <div class="eyebrow">ANNE / MULTI-MODEL CONTROL</div>
+  <h1>One private command center.</h1>
+  <p>Choose from models already configured in Hermes. ANNE verifies private self-hosted endpoints before enabling a route. Hosted or cost-unknown models remain visible but blocked under the $0 policy.</p>
 </section>
 <section class="grid">
   <article class="card">
-    <div class="head"><h2>Hermes agent gateway</h2><span class="pill warn" id="gateway-pill">Checking</span></div>
-    <div class="stat" id="gateway-state">—</div>
-    <div class="muted" id="gateway-detail">Waiting for authenticated health check.</div>
-    <div class="row"><div><b>WebUI authentication</b><small>Current browser session</small></div><span class="pill" id="auth-state">Checking</span></div>
-    <div class="row"><div><b>Health checked</b><small id="checked-at">—</small></div><span class="pill">Live probe</span></div>
+    <div class="head"><h2>Model selection</h2><span class="pill warn" id="model-pill">Checking</span></div>
+    <label class="field muted" for="mode-select">Operating mode</label>
+    <select class="select" id="mode-select">
+      <option value="FAST">FAST · prefer lightweight models</option>
+      <option value="REASON">REASON · prefer reasoning models</option>
+      <option value="LOCAL">LOCAL · verified private endpoints only</option>
+      <option value="AUTO">AUTO · prefer active verified local provider</option>
+    </select>
+    <label class="field muted" for="model-select">Model / provider</label>
+    <select class="select" id="model-select" disabled><option>Loading Hermes model catalog…</option></select>
+    <div class="buttonrow"><button class="button primary" id="route-button" disabled>Open model session</button><button class="button" id="refresh-button" type="button">Refresh</button></div>
+    <div class="error" id="route-error" role="alert"></div>
+    <div class="notice" id="policy-detail">Checking local endpoint and provider eligibility.</div>
   </article>
   <article class="card">
-    <div class="head"><h2>Grok model routing</h2><span class="pill warn" id="grok-pill">Checking</span></div>
-    <div class="stat" id="grok-state">xAI</div>
-    <div class="muted" id="grok-detail">Checking Hermes provider configuration.</div>
-    <label class="muted" for="grok-model">Available Grok model</label>
-    <select class="select" id="grok-model" disabled><option>Loading models…</option></select>
-    <button class="button primary" id="route-button" disabled>Open new Grok session</button>
-    <div class="muted" id="route-detail" style="margin-top:9px">Creates a new session with Grok selected. No prompt is sent.</div>
-    <div class="error" id="route-error" role="alert"></div>
+    <div class="head"><h2>Private runtime</h2><span class="pill warn" id="gateway-pill">Checking</span></div>
+    <div class="statusgrid">
+      <div class="statusbox"><span class="muted">Hermes agent</span><strong id="gateway-state">—</strong><span class="muted" id="gateway-detail">Waiting for health check</span></div>
+      <div class="statusbox"><span class="muted">WebUI session</span><strong id="auth-state">—</strong><span class="muted">Existing Hermes authentication</span></div>
+    </div>
+    <div class="row" style="margin-top:12px"><div><b>Last verified</b><small id="checked-at">—</small></div><span class="pill">Read-only probe</span></div>
+    <div class="row"><div><b>Network boundary</b><small>Same-origin Hermes endpoints; keep access on private Tailscale network</small></div><span class="pill good">Private-first</span></div>
   </article>
   <article class="card full">
-    <div class="head"><h2>Runtime boundaries</h2><span class="pill good">Safe defaults</span></div>
-    <div class="row"><div><b>Credentials</b><small>Read by Hermes server only; never returned to this page</small></div><span class="pill good">Server-side</span></div>
-    <div class="row"><div><b>Grok API usage</b><small>No billable request until you send a message in the new session</small></div><span class="pill good">No test spend</span></div>
-    <div class="row"><div><b>External actions</b><small>Remain subject to Hermes permissions and approval gates</small></div><span class="pill good">Approval-gated</span></div>
-    <div class="row"><div><b>Refresh</b><small>Read-only status polling every 20 seconds</small></div><span class="pill">Enabled</span></div>
-    <div class="notice">If Grok is not configured in the active Hermes profile, the route stays disabled. Authenticate/configure xAI in Hermes first; do not paste API keys into this page.</div>
+    <div class="head"><h2>Available model catalog</h2><span class="pill" id="catalog-pill">Not loaded</span></div>
+    <div class="model-count" id="model-count">—</div>
+    <div class="muted" id="catalog-detail">Models are read from the active Hermes profile. No credentials are sent to this page.</div>
+    <div class="catalog" id="provider-catalog" aria-live="polite"></div>
+    <div class="legend"><span><i class="dot"></i>Verified private / self-hosted</span><span><i class="dot blocked"></i>Blocked: hosted or cost unknown</span></div>
+  </article>
+  <article class="card full">
+    <div class="head"><h2>Execution and spending boundaries</h2><span class="pill good">Fail-closed</span></div>
+    <div class="row"><div><b>Model routing</b><small>Only self-hosted providers with a verified private endpoint can be selected.</small></div><span class="pill good">$0 route policy</span></div>
+    <div class="row"><div><b>Provider credentials</b><small>Remain in Hermes server configuration; never stored in browser storage.</small></div><span class="pill good">Server-side</span></div>
+    <div class="row"><div><b>Session creation</b><small>Uses the existing authenticated Hermes endpoint and CSRF protection.</small></div><span class="pill good">Native</span></div>
+    <div class="row"><div><b>Production actions</b><small>No deployment, payment, trading, Supabase writes, or permission changes are triggered here.</small></div><span class="pill">Approval required</span></div>
+    <div class="notice">Private endpoint verification is a conservative routing check, not a guarantee of zero electricity or infrastructure cost. If a provider's endpoint cannot be verified as private, ANNE blocks it rather than guessing.</div>
   </article>
 </section>
-<div class="footer">ANNE interface · authenticated same-origin Hermes APIs · no Supabase service key · no public backend endpoint · no deployment action</div>
+<div class="footer">ANNE · Existing Hermes provider registry · Authenticated same-origin session API · No browser API keys · No hosted fallback</div>
 </main>
+<script src="/static/anne-policy.js" defer></script>
 <script src="/static/anne-console.js" defer></script>
 </body>
 </html>
