@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#17191c">
+<meta name="color-scheme" content="dark">
+<title>ANNE — Personal Command Center</title>
+<link rel="stylesheet" href="/static/anne-home.css">
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="#home" aria-label="ANNE home"><span class="brand-mark">A<span>·</span></span><span><b>ANNE</b><small>PERSONAL COMMAND</small></span></a>
+    <div class="side-label">WORKSPACE</div>
+    <nav class="nav" aria-label="Main navigation">
+      <button class="nav-item active" data-view="home"><span class="nav-icon">⌂</span>Home</button>
+      <button class="nav-item" data-view="create"><span class="nav-icon">✳</span>Create</button>
+      <button class="nav-item" data-view="intelligence"><span class="nav-icon">◈</span>Intelligence</button>
+      <button class="nav-item" data-view="agents"><span class="nav-icon">⌘</span>Agents</button>
+      <button class="nav-item" data-view="business"><span class="nav-icon">▤</span>Business</button>
+      <button class="nav-item" data-view="projects"><span class="nav-icon">▧</span>Projects</button>
+      <button class="nav-item" data-view="assets"><span class="nav-icon">◇</span>Assets</button>
+      <button class="nav-item" data-view="activity"><span class="nav-icon">◷</span>Activity</button>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <button class="nav-item settings-link" data-view="settings"><span class="nav-icon">⚙</span>Settings</button>
+    <div class="sidebar-foot"><span class="status-dot"></span><span>Private workspace</span><span class="foot-tag">LOCAL-FIRST</span></div>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <button class="mobile-menu" id="mobile-menu" aria-label="Open navigation">☰</button>
+      <div class="crumb"><span>ANNE</span><i>/</i><b id="crumb-current">Home</b></div>
+      <div class="top-actions"><span class="local-chip"><span class="status-dot"></span>Private workspace</span><a class="icon-button" href="/" title="Open Hermes" aria-label="Open Hermes">↗</a><div class="avatar">A</div></div>
+    </header>
+    <div class="content">
+      <section class="view active" id="view-home">
+        <div class="welcome-row"><div><div class="eyebrow">MONDAY · YOUR WORKSPACE</div><h1>Good morning.</h1><p class="subhead">A clear view of what matters. Your workspace, your pace.</p></div><div class="date-card"><span>YOUR COMMAND CENTER</span><b id="today-date">Today</b></div></div>
+        <div class="hero-card"><div class="hero-copy"><div class="eyebrow light">ANNE / PERSONAL OPERATING SPACE</div><h2>Make room for<br><em>what's next.</em></h2><p>Your creative studio and control room, gathered in one calm place.</p><button class="primary-button" data-go="create">Open creative studio <span>↗</span></button></div><div class="hero-orbit" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit-core">A·</div><div class="orbit-point"></div></div><div class="hero-grain"></div></div>
+        <div class="section-heading"><div><div class="eyebrow">AT A GLANCE</div><h2>Today's overview</h2></div><span class="subtle-tag">LIVE WHERE CONNECTED</span></div>
+        <div class="overview-grid">
+          <article class="metric-card"><div class="metric-top"><span>AI RUNTIME</span><span class="metric-symbol">◈</span></div><strong id="home-runtime">Checking</strong><p id="runtime-note">Verifying the existing Hermes runtime</p><div class="metric-foot"><span class="mini-dot" id="runtime-dot"></span><span id="runtime-status">Checking connection</span></div></article>
+          <article class="metric-card"><div class="metric-top"><span>MODEL ROUTING</span><span class="metric-symbol">⌘</span></div><strong id="home-models">Checking</strong><p id="models-note">Reading the existing provider registry</p><div class="metric-foot"><span class="mini-dot" id="models-dot"></span><span id="models-status">Checking providers</span></div></article>
+          <article class="metric-card"><div class="metric-top"><span>BUSINESS LEDGER</span><span class="metric-symbol">▤</span></div><strong>Not connected</strong><p>No verified ledger data is being displayed.</p><div class="metric-foot"><span class="mini-dot muted-dot"></span><span>Awaiting approved data source</span></div></article>
+          <article class="metric-card"><div class="metric-top"><span>PROJECT PORTFOLIO</span><span class="metric-symbol">▧</span></div><strong>Workspace view</strong><p>Connect project records to show live progress.</p><div class="metric-foot"><span class="mini-dot muted-dot"></span><span>No project feed queried</span></div></article>
+        </div>
+        <div class="home-lower">
+          <article class="panel focus-panel"><div class="panel-head"><div><div class="eyebrow">YOUR NEXT MOVE</div><h3>Creative workspace</h3></div><span class="panel-mark">✳</span></div><p>Sketch an interface, shape an idea, or write a brief. Keep the work in draft until you're ready.</p><button class="text-button" data-go="create">Start creating <span>→</span></button></article>
+          <article class="panel"><div class="panel-head"><div><div class="eyebrow">SYSTEM PULSE</div><h3>Connected services</h3></div><span class="live-label"><i></i>CHECKED LIVE</span></div><div class="service-row"><span>Hermes runtime</span><b id="service-runtime">Checking…</b></div><div class="service-row"><span>Provider catalog</span><b id="service-providers">Checking…</b></div><div class="service-row"><span>Desktop / local Mac</span><b class="unknown">Not verified</b></div><div class="service-row"><span>Business records</span><b class="unknown">Not connected</b></div><button class="text-button" data-go="intelligence">View intelligence <span>→</span></button></article>
+        </div>
+      </section>
+
+      <section class="view" id="view-create">
+        <div class="page-intro"><div class="eyebrow">CREATIVE STUDIO</div><h1>Start with an idea.</h1><p class="subhead">A quiet space to shape the interface, product, or experience you want to make.</p></div>
+        <div class="studio-grid"><article class="panel studio-main"><div class="panel-head"><div><div class="eyebrow">NEW DESIGN BRIEF</div><h3>What are we imagining?</h3></div><span class="panel-mark">✳</span></div><label for="design-brief">Your creative direction</label><textarea id="design-brief" rows="8" placeholder="Describe the screen, experience, mood, or interaction you want to explore…"></textarea><div class="studio-actions"><span class="muted-copy">Draft stays in this browser until you choose to copy it.</span><button class="primary-button" id="copy-brief">Copy design brief ↗</button></div><div class="feedback" id="copy-feedback" aria-live="polite"></div></article><article class="panel"><div class="eyebrow">DESIGN LANGUAGE</div><h3>ANNE / Graphite</h3><p class="panel-copy">Restrained, tactile, focused. Soft metallic highlights and translucent layers without visual noise.</p><div class="swatches"><span style="--swatch:#17191c"></span><span style="--swatch:#25292d"></span><span style="--swatch:#aeb5bb"></span><span style="--swatch:#e6e9eb"></span><span style="--swatch:#737c84"></span></div><div class="token-row"><span>Surfaces</span><b>Graphite / smoked glass</b></div><div class="token-row"><span>Accent</span><b>Brushed silver</b></div><div class="token-row"><span>Motion</span><b>Quiet / purposeful</b></div></article></div>
+      </section>
+
+      <section class="view" id="view-intelligence"><div class="page-intro"><div class="eyebrow">MODEL & SYSTEM AWARENESS</div><h1>Intelligence.</h1><p class="subhead">A live view of the provider registry already configured in Hermes.</p></div><div class="overview-grid two"><article class="metric-card"><div class="metric-top"><span>HERMES RUNTIME</span><span class="metric-symbol">◈</span></div><strong id="intel-runtime">Checking</strong><p id="intel-runtime-note">Read-only health check</p></article><article class="metric-card"><div class="metric-top"><span>REGISTERED MODELS</span><span class="metric-symbol">⌘</span></div><strong id="intel-models">Checking</strong><p id="intel-models-note">Existing provider data only</p></article></div><article class="panel table-panel"><div class="panel-head"><div><div class="eyebrow">EXISTING PROVIDERS</div><h3>Model catalog</h3></div><button class="quiet-button" id="refresh-intel">Refresh status</button></div><div id="provider-list" class="provider-list"><p class="empty-state">Reading the existing Hermes provider registry…</p></div><p class="footnote">This view does not change providers, model settings, credentials, or routing.</p></article></section>
+
+      <section class="view" id="view-agents"><div class="page-intro"><div class="eyebrow">WORKFORCE</div><h1>Agents.</h1><p class="subhead">One place to understand the agent team without implying agents are running when they aren't.</p></div><article class="panel"><div class="empty-illustration">⌘</div><h3>Agent activity isn't connected yet.</h3><p class="panel-copy">No live agent-task feed has been queried for this screen. Existing agent services and jobs remain untouched.</p><button class="text-button" data-go="activity">Review system activity →</button></article></section>
+
+      <section class="view" id="view-business"><div class="page-intro"><div class="eyebrow">OPERATIONS & REVENUE</div><h1>Business.</h1><p class="subhead">A grounded view of business activity, with no guessed revenue or invented metrics.</p></div><div class="overview-grid two"><article class="metric-card"><div class="metric-top"><span>REVENUE COLLECTED</span><span class="metric-symbol">↗</span></div><strong>—</strong><p>No verified payment ledger connected.</p></article><article class="metric-card"><div class="metric-top"><span>DELIVERY STATUS</span><span class="metric-symbol">◇</span></div><strong>—</strong><p>No verified delivery records connected.</p></article></div><article class="panel"><div class="eyebrow">DATA INTEGRITY</div><h3>Connect evidence before displaying totals.</h3><p class="panel-copy">This dashboard intentionally leaves financial values blank until an authorized source can verify them. No payment, checkout, or accounting action is available from this view.</p></article></section>
+
+      <section class="view" id="view-projects"><div class="page-intro"><div class="eyebrow">PORTFOLIO</div><h1>Projects.</h1><p class="subhead">A single portfolio view for work already in your ecosystem.</p></div><article class="panel"><div class="empty-illustration">▧</div><h3>Project records aren't connected to this view.</h3><p class="panel-copy">No projects have been fabricated or imported. Your existing repositories and project data are unchanged.</p></article></section>
+
+      <section class="view" id="view-assets"><div class="page-intro"><div class="eyebrow">DIGITAL PROPERTY</div><h1>Assets.</h1><p class="subhead">A home for reusable designs, files, product assets, and intellectual property records.</p></div><article class="panel"><div class="empty-illustration">◇</div><h3>Asset inventory awaiting a source.</h3><p class="panel-copy">No file library or asset register has been scanned. Connect an approved source when you want this section populated.</p></article></section>
+
+      <section class="view" id="view-activity"><div class="page-intro"><div class="eyebrow">SYSTEM HISTORY</div><h1>Activity.</h1><p class="subhead">Read-only checks performed by this dashboard during the current visit.</p></div><article class="panel"><div class="panel-head"><h3>Recent checks</h3><span class="live-label"><i></i>THIS SESSION</span></div><div id="activity-list" class="activity-list"><p class="empty-state">No checks recorded yet.</p></div></article></section>
+
+      <section class="view" id="view-settings"><div class="page-intro"><div class="eyebrow">PREFERENCES</div><h1>Settings.</h1><p class="subhead">A few local display preferences. No account or backend settings are changed here.</p></div><article class="panel settings-panel"><div class="setting-row"><div><b>Appearance</b><p>Keep ANNE in its graphite and silver design language.</p></div><span class="setting-value">Graphite · Dark</span></div><div class="setting-row"><div><b>Workspace mode</b><p>Local-first presentation; connected services are read-only in this view.</p></div><span class="setting-value">Private-first</span></div><div class="setting-row"><div><b>Production access</b><p>This dashboard does not deploy, modify credentials, or trigger payments.</p></div><span class="setting-value">Not enabled</span></div></article></section>
+      <footer class="app-footer"><span>ANNE</span><span>PERSONAL COMMAND CENTER</span><span>LOCAL-FIRST · APPROVAL-GATED</span></footer>
+    </div>
+  </main>
+</div>
+<script src="/static/anne-home.js" defer></script>
+</body>
+</html>
