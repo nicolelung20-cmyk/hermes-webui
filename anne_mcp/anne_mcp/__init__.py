@@ -1,0 +1,1 @@
+"""ANNE Personal MCP package."""
