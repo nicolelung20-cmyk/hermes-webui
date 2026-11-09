@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "anne-personal-mcp"
+version = "0.1.0"
+description = "Private, read-only MCP bridge for ANNE, Hermes, and local AI Studio"
+requires-python = ">=3.10"
+dependencies = ["mcp>=1.9,<2"]
+
+[project.scripts]
+anne-mcp = "anne_mcp.server:main"
+
+[tool.setuptools.packages.find]
+include = ["anne_mcp*"]
