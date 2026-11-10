@@ -1,0 +1,18 @@
+language: en-US
+reviews:
+  profile: assertive
+  request_changes_workflow: true
+  high_level_summary: true
+  review_status: true
+  collapse_walkthrough: false
+  path_instructions:
+    - path: "anne-secondary-host/**"
+      instructions: |
+        Review this as a security-sensitive private agent host. Prioritize authentication,
+        authorization, SSRF, secret handling, network exposure, SQLite integrity,
+        auditability, dependency risk, container hardening, and accidental execution.
+        Confirm task intake is disabled by default and no endpoint executes shell commands,
+        arbitrary tools, or queued tasks. Flag public binds, Tailscale Funnel, paid services,
+        production mutations, or secrets committed to source control.
+chat:
+  auto_reply: true
