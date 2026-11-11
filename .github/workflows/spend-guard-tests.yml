@@ -2,7 +2,7 @@ name: Spend guard tests
 
 on:
   push:
-    branches: ["master", "fix/anne-spend-guard"]
+    branches: ["master", "fix/anne-spend-guard", "fix/durable-spend-safety"]
   pull_request:
     branches: ["master"]
   workflow_dispatch:
@@ -23,5 +23,5 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Run focused spending-guard tests
-        run: python -m unittest tests.test_spend_guard -v
+      - name: Run spend guard tests
+        run: python -m unittest tests.test_spend_guard tests.test_durable_spend_ledger -v
