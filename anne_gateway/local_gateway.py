@@ -32,6 +32,8 @@ def _valid_loopback_url(value: str) -> bool:
     return bool(re.match(r"^https?://(127\.0\.0\.1|localhost|\[::1\])(?::\d+)?/v1$", value))
 
 
+if HOST not in {"127.0.0.1", "localhost"}:
+    raise SystemExit("ANNE_GATEWAY_HOST must be 127.0.0.1 or localhost; public binds are disabled.")
 if not _valid_loopback_url(UPSTREAM):
     raise SystemExit("ANNE_OLLAMA_OPENAI_URL must be a loopback /v1 URL.")
 if not MODELS or DEFAULT_MODEL not in MODELS:
